@@ -4,24 +4,47 @@ import (
 	"context"
 	"os"
 
-	"github.com/fidellr/fishery_api/internal/commodities/delivery/http"
+	areaOptHttp "github.com/fidellr/fishery_api/internal/area-options/delivery/http"
+	commodityHttp "github.com/fidellr/fishery_api/internal/commodities/delivery/http"
+	sizeOptHttp "github.com/fidellr/fishery_api/internal/size-options/delivery/http"
 	"github.com/spf13/cobra"
 )
 
-func Execute(ctx context.Context, handlers *http.Handler) {
-	rootCmd := &cobra.Command{
+func ExecuteCmd(
+	ctx context.Context,
+	commHandlers *commodityHttp.Handler,
+	sizeOptHandlers *sizeOptHttp.Handler,
+	areaOptHandlers *areaOptHttp.Handler,
+) {
+	cmd := &cobra.Command{
 		Use:   "fishery",
-		Short: "fishery api desc",
+		Short: "fishery api to create, get or modify commodity and options",
 	}
 
-	err := rootCmd.ExecuteContext(ctx)
+	err := cmd.ExecuteContext(ctx)
 	if err != nil {
 		os.Exit(1)
 	}
 
-	rootCmd.AddCommand(GetAllByCommodityCmd(handlers))
+	cmd.AddCommand(
+		AddRecords(commHandlers),
+		GetAllByCommodityCmd(commHandlers),
+		GetCommodityByIDCmd(commHandlers),
+		DeleteRecords(commHandlers),
+		UpdateRecords(commHandlers),
 
-	err = rootCmd.Execute()
+		GetMostCommodityRecordsCmd(commHandlers),
+		GetByArea(commHandlers),
+
+		AddSizeOptRecords(sizeOptHandlers),
+		UpdateSizeOptRecords(sizeOptHandlers),
+		DeleteSizeOptRecords(sizeOptHandlers),
+
+		AddAreaOptRecords(areaOptHandlers),
+		UpdateAreaOptRecords(areaOptHandlers),
+		DeleteAreaOptRecords(areaOptHandlers))
+
+	err = cmd.Execute()
 	if err != nil {
 		os.Exit(1)
 	}
