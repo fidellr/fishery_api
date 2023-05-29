@@ -37,27 +37,6 @@ docker run -it --rm fishery [commands]
    ```shell
    go build -o fishery-cli
    ```
-## File Structure
-The repository is organized as follows:
-
-- `examples/`: This directory contains the main application code and related files.
-  - `config.json`: The configuration file for the Fishery API. It contains settings such as database connection details and API port.
-  - `main.go`: The entry point of the Fishery API application.
-  - `area-options/`: This directory contains the code for managing area options.
-    - `delivery/http/`: The HTTP delivery layer for area options. It handles the HTTP requests and responses.
-    - `repository/`: The repository layer for area options. It provides the data access and persistence logic.
-    - `usecase/`: The use case layer for area options. It contains the business logic for managing area options.
-  - `commodities/`: This directory contains the code for managing commodities.
-    - `delivery/http/`: The HTTP delivery layer for commodities.
-    - `repository/`: The repository layer for commodities.
-    - `usecase/`: The use case layer for commodities.
-  - `size-options/`: This directory contains the code for managing size options.
-    - `delivery/http/`: The HTTP delivery layer for size options.
-    - `repository/`: The repository layer for size options.
-    - `usecase/`: The use case layer for size options.
-
-- `go.mod` and `go.sum`: The Go module files that manage the project's dependencies.
-
 ## Usage
 
 The Fishery API CLI allows you to perform various operations on the fishery data. Here are the available commands:
@@ -123,3 +102,25 @@ To retrieve latest 10 existing records
 ```shell
 ./fishery-cli getLatestTenCommodities
 ```
+
+## File Structure
+The repository is organized as follows:
+
+- `examples/`: This directory contains the main application code and related files.
+  - `config.json`: The configuration file for the Fishery API. It contains settings such as database connection details and API port.
+  - `main.go`: The entry point of the Fishery API application.
+  - `area-options/`: This directory contains the code for managing area options.
+    - `delivery/http/`: The HTTP delivery layer for area options. It handles the HTTP requests and responses.
+    - `repository/`: The repository layer for area options. It provides the data access and persistence logic.
+    - `usecase/`: The use case layer for area options. It contains the business logic for managing area options.
+  - `commodities/`: This directory contains the code for managing commodities.
+    - `delivery/http/`: The HTTP delivery layer for commodities.
+    - `repository/`: The repository layer for commodities.
+    - `usecase/`: The use case layer for commodities.
+  - `size-options/`: This directory contains the code for managing size options.
+    - `delivery/http/`: The HTTP delivery layer for size options.
+    - `repository/`: The repository layer for size options.
+    - `usecase/`: The use case layer for size options.
+
+- `go.mod` and `go.sum`: The Go module files that manage the project's dependencies.
+
