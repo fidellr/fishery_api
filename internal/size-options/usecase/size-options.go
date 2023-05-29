@@ -53,7 +53,6 @@ func (u *sizeOptUsecase) UpdateRecords(ctx context.Context, payloads []model.Siz
 			return err
 		}
 	}
-	fmt.Println(payloads)
 
 	err := u.sizeOptRepo.UpdateRecords(ctx, payloads)
 	if err != nil {
