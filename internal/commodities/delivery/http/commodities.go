@@ -28,6 +28,20 @@ func (h *Handler) AddRecords(ctx context.Context, records []model.Commodity) err
 	return nil
 }
 
+func (h *Handler) GetAllCommodity(ctx context.Context) (string, error) {
+	list, err := h.commodityService.GetAllCommodity(ctx)
+	if err != nil {
+		return "", utils.ConstraintErrorf("%s", err.Error())
+	}
+
+	jsonByte, err := json.MarshalIndent(list, "", "    ")
+	if err != nil {
+		return "", utils.ConstraintErrorf("%s", err.Error())
+	}
+
+	return string(jsonByte), nil
+}
+
 func (h *Handler) GetAllByCommodity(ctx context.Context, commodity string) (string, error) {
 	list, err := h.commodityService.GetAllByCommodity(ctx, commodity)
 	if err != nil {

@@ -7,8 +7,8 @@ import (
 )
 
 type AggregateRepo interface {
-	// GetAllByRange(ctx context.Context, price, size string, date time.Time) ([]model.Commodity, error)
-	// GetMaxPrice(ctx context.Context, week int32, commodity string) ([]model.Commodity, error)
+	GetAllByRange(ctx context.Context, price, size string) ([]model.Commodity, error)
+	GetMaxPrice(ctx context.Context, week int, commodity string) ([]model.Commodity, error)
 	GetMostCommodityRecords(ctx context.Context) ([]model.Commodity, error)
 	GetByArea(ctx context.Context, city, province string) ([]model.Commodity, error)
 }

@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -25,6 +26,7 @@ func NewCommoditiesUsecase(ctx context.Context, commoditiesRepo commodities.Comm
 }
 
 func (u *commoditiesUsecase) AddRecords(ctx context.Context, records []model.Commodity) error {
+	cc := utils.NewCurrencyConverter()
 	if records == nil || len(records) < 1 {
 		return utils.ConstraintErrorf("Data cannot be empty or nil")
 	}
@@ -37,6 +39,17 @@ func (u *commoditiesUsecase) AddRecords(ctx context.Context, records []model.Com
 		rec.AreaKota = strings.ToUpper(rec.AreaKota)
 		rec.TglParsed = utils.ParseTime(time.Now())
 		rec.Timestamp = fmt.Sprintf("%v", utils.TimeIn(time.Now(), "Indonesia").UnixMilli())
+
+		recPrice, err := strconv.ParseFloat(rec.Price, 64)
+		if err != nil {
+			return err
+		}
+		convertedPrice, err := cc.ConvertToUSD(recPrice, "IDR")
+		if err != nil {
+			return err
+		}
+
+		rec.USD = fmt.Sprintf("%v", convertedPrice)
 		if err := utils.Validate(rec); err != nil {
 			return err
 		}
@@ -51,10 +64,38 @@ func (u *commoditiesUsecase) AddRecords(ctx context.Context, records []model.Com
 	return nil
 }
 
+func convertPriceToUSD(cc *utils.CurrencyConverter, price float64, currency string) (float64, error) {
+	convertedPrice, err := cc.ConvertToUSD(price, currency)
+	if err != nil {
+		return 0, err
+	}
+
+	return convertedPrice, nil
+}
+
 func (u *commoditiesUsecase) GetAllCommodity(ctx context.Context) ([]model.Commodity, error) {
 	list, err := u.commoditiesRepo.GetAllCommodity(ctx)
 	if err != nil {
 		return nil, err
+	}
+
+	cc := utils.NewCurrencyConverter()
+	for i := range list {
+		rec := &list[i]
+		recPrice, err := strconv.ParseFloat(rec.Price, 64)
+		if err != nil {
+			return nil, err
+		}
+
+		convertedPrice, err := convertPriceToUSD(cc, recPrice, "IDR")
+		if err != nil {
+			return nil, err
+		}
+
+		rec.USD = fmt.Sprintf("%v", convertedPrice)
+		if err := utils.Validate(rec); err != nil {
+			return nil, err
+		}
 	}
 
 	return list, nil
@@ -66,6 +107,25 @@ func (u *commoditiesUsecase) GetAllByCommodity(ctx context.Context, commodity st
 		return nil, err
 	}
 
+	cc := utils.NewCurrencyConverter()
+	for i := range list {
+		rec := &list[i]
+		recPrice, err := strconv.ParseFloat(rec.Price, 64)
+		if err != nil {
+			return nil, err
+		}
+
+		convertedPrice, err := convertPriceToUSD(cc, recPrice, "IDR")
+		if err != nil {
+			return nil, err
+		}
+
+		rec.USD = fmt.Sprintf("%v", convertedPrice)
+		if err := utils.Validate(rec); err != nil {
+			return nil, err
+		}
+	}
+
 	return list, nil
 }
 
@@ -73,6 +133,25 @@ func (u *commoditiesUsecase) GetByID(ctx context.Context, uuid string) ([]model.
 	list, err := u.commoditiesRepo.GetByID(ctx, uuid)
 	if err != nil {
 		return nil, err
+	}
+
+	cc := utils.NewCurrencyConverter()
+	for i := range list {
+		rec := &list[i]
+		recPrice, err := strconv.ParseFloat(rec.Price, 64)
+		if err != nil {
+			return nil, err
+		}
+
+		convertedPrice, err := convertPriceToUSD(cc, recPrice, "IDR")
+		if err != nil {
+			return nil, err
+		}
+
+		rec.USD = fmt.Sprintf("%v", convertedPrice)
+		if err := utils.Validate(rec); err != nil {
+			return nil, err
+		}
 	}
 
 	return list, err
@@ -83,12 +162,25 @@ func (u *commoditiesUsecase) UpdateRecords(ctx context.Context, payloads []model
 		return utils.ConstraintErrorf("Data cannot be empty or nil")
 	}
 
+	cc := utils.NewCurrencyConverter()
 	for i := range payloads {
 		payload := &payloads[i]
 		payload.Komoditas = strings.ToUpper(payload.Komoditas)
 		payload.AreaProvinsi = strings.ToUpper(payload.AreaProvinsi)
 		payload.AreaKota = strings.ToUpper(payload.AreaKota)
 		payload.Timestamp = fmt.Sprintf("%v", utils.TimeIn(time.Now(), "Indonesia").UnixMilli())
+
+		recPrice, err := strconv.ParseFloat(payload.Price, 64)
+		if err != nil {
+			return err
+		}
+
+		convertedPrice, err := convertPriceToUSD(cc, recPrice, "IDR")
+		if err != nil {
+			return err
+		}
+		payload.USD = fmt.Sprintf("%v", convertedPrice)
+
 		if err := utils.Validate(payload); err != nil {
 			return err
 		}

@@ -74,6 +74,7 @@ func (repo *CommoditiesRepository) GetAllCommodity(ctx context.Context) ([]model
 
 	var response []model.Commodity
 
+	fmt.Println("response: ", string(res.Body))
 	if err = json.Unmarshal(res.Body, &response); err != nil {
 		return nil, err
 	}
