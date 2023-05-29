@@ -82,19 +82,21 @@ func (u *commoditiesUsecase) GetAllCommodity(ctx context.Context) ([]model.Commo
 	cc := utils.NewCurrencyConverter()
 	for i := range list {
 		rec := &list[i]
-		recPrice, err := strconv.ParseFloat(rec.Price, 64)
-		if err != nil {
-			return nil, err
-		}
+		if rec.Price != "" {
+			recPrice, err := strconv.ParseFloat(rec.Price, 64)
+			if err != nil {
+				return nil, err
+			}
 
-		convertedPrice, err := convertPriceToUSD(cc, recPrice, "IDR")
-		if err != nil {
-			return nil, err
-		}
+			convertedPrice, err := convertPriceToUSD(cc, recPrice, "IDR")
+			if err != nil {
+				return nil, err
+			}
 
-		rec.USD = fmt.Sprintf("%v", convertedPrice)
-		if err := utils.Validate(rec); err != nil {
-			return nil, err
+			rec.USD = fmt.Sprintf("%v", convertedPrice)
+			if err := utils.Validate(rec); err != nil {
+				return nil, err
+			}
 		}
 	}
 
@@ -162,24 +164,12 @@ func (u *commoditiesUsecase) UpdateRecords(ctx context.Context, payloads []model
 		return utils.ConstraintErrorf("Data cannot be empty or nil")
 	}
 
-	cc := utils.NewCurrencyConverter()
 	for i := range payloads {
 		payload := &payloads[i]
 		payload.Komoditas = strings.ToUpper(payload.Komoditas)
 		payload.AreaProvinsi = strings.ToUpper(payload.AreaProvinsi)
 		payload.AreaKota = strings.ToUpper(payload.AreaKota)
 		payload.Timestamp = fmt.Sprintf("%v", utils.TimeIn(time.Now(), "Indonesia").UnixMilli())
-
-		recPrice, err := strconv.ParseFloat(payload.Price, 64)
-		if err != nil {
-			return err
-		}
-
-		convertedPrice, err := convertPriceToUSD(cc, recPrice, "IDR")
-		if err != nil {
-			return err
-		}
-		payload.USD = fmt.Sprintf("%v", convertedPrice)
 
 		if err := utils.Validate(payload); err != nil {
 			return err

@@ -74,7 +74,6 @@ func (repo *CommoditiesRepository) GetAllCommodity(ctx context.Context) ([]model
 
 	var response []model.Commodity
 
-	fmt.Println("response: ", string(res.Body))
 	if err = json.Unmarshal(res.Body, &response); err != nil {
 		return nil, err
 	}
@@ -239,7 +238,6 @@ func (repo *CommoditiesRepository) DeleteRecords(ctx context.Context, uuid []str
 					Err:   customError.Wrap(err, "do request failing"),
 				}
 			}
-			fmt.Println(res.StatusCode)
 
 			if err = utils.HandleHTTPError(res.StatusCode, res.Body); err != nil {
 				respChan <- model.ResponseChannel{
