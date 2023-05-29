@@ -7,6 +7,17 @@ This repository contains a command-line interface (CLI) tool for interacting wit
 - Go (version X.X.X)
 - Git
 
+## Docker Commands
+1. Build the image
+```shell
+docker build -t fishery .
+```
+
+2. Run the container
+```shell
+docker run -it --rm fishery [commands]
+```
+
 ## Installation
 
 1. Clone the repository:
@@ -31,6 +42,7 @@ This repository contains a command-line interface (CLI) tool for interacting wit
 
 The Fishery API CLI allows you to perform various operations on the fishery data. Here are the available commands:
 
+## Commodities
 ### Create New Records
 To create new records of commodity
 ```shell
@@ -62,6 +74,7 @@ To delete existing record more than one at once
 ./fishery-cli deleteCommodityRecords '["11da9b73-3765-4c19-a30d-d234e3c8abf0","eb3b2547-1b7c-4304-8281-dfc7d0b8991e"]'
 ```
 
+## Commodity Aggregator Command
 ### Get All Records by Range
 
 To retrieve records based on a specific price range, size range, and date range
