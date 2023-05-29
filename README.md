@@ -19,7 +19,7 @@ This repository contains a command-line interface (CLI) tool for interacting wit
 2. Change to the project directory:
 
    ```shell
-   cd fishery_api
+   cd fishery_api/examples
    ```
 
 3. Build the CLI binary:
