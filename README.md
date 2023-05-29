@@ -1,4 +1,3 @@
-```markdown
 # Fishery API CLI
 
 This repository contains a command-line interface (CLI) tool for interacting with the Fishery API.
