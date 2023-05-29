@@ -1,5 +1,15 @@
 package cmd
 
+/**
+TODO:
+1. getAllByRange (harga, size, tanggal)
+2. getMaxPrice (by week, by commodity)
+3. Mencari berdasar range harga
+4. 10 Latest Data (switch index aja dan take 10 items)
+5. Tambahkan informasi harga dalam USD dengan memanfaatkan layanan
+currency converter
+	1. bikin modulenya sendiri dalam aplikasi dan terapkan mekanisme caching
+**/
 import (
 	"context"
 	"os"
@@ -18,7 +28,7 @@ func ExecuteCmd(
 ) {
 	cmd := &cobra.Command{
 		Use:   "fishery",
-		Short: "fishery api to create, get or modify commodity and options",
+		Short: "fishery cli to create, get, aggregate or modify commodity and options",
 	}
 
 	err := cmd.ExecuteContext(ctx)
@@ -35,6 +45,11 @@ func ExecuteCmd(
 
 		GetMostCommodityRecordsCmd(commHandlers),
 		GetByArea(commHandlers),
+		GetMaxPrice(commHandlers),
+		GetAllByRange(commHandlers),
+		GetAllByCommodityAndArea(commHandlers),
+		GetAllByPriceRange(commHandlers),
+		GetLatestTenCommodities(commHandlers),
 
 		AddSizeOptRecords(sizeOptHandlers),
 		UpdateSizeOptRecords(sizeOptHandlers),

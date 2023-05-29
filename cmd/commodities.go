@@ -34,7 +34,7 @@ func AddRecords(handlers *http.Handler) *cobra.Command {
 
 func GetAllByCommodityCmd(handlers *http.Handler) *cobra.Command {
 	return &cobra.Command{
-		Use:     "getAllByCommodity",
+		Use:     "getAllByCommodity [data]",
 		Short:   "To get all by given commodity name",
 		Aliases: []string{"allByCommodity"},
 		Run: func(cmd *cobra.Command, args []string) {
