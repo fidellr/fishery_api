@@ -133,7 +133,7 @@ func GetAllByCommodityAndArea(handlers *http.Handler) *cobra.Command {
 			for i := len(records) - 1; i >= 0; i-- {
 				rec := &records[i]
 
-				if rec.AreaKota != dataJson["area_kota"] && rec.AreaProvinsi != dataJson["area_provinsi"] {
+				if rec.AreaKota != strings.ToUpper(dataJson["area_kota"]) || rec.AreaProvinsi != strings.ToUpper(dataJson["area_provinsi"]) {
 					records = append(records[:i], records[i+1:]...)
 				}
 			}
